@@ -22,3 +22,41 @@ def get_ode_data(file_name: str) -> pd.DataFrame:
 
     return data
 
+def get_seqs(data: np.ndarray, seq_len: int) -> np.ndarray:
+    """Prepara la cadena de datos con su pareja de validacion
+
+    Args:
+        data (np.ndarray): Simulaciones de las EDOs
+        seq_len (int): tamano de la cadena de 
+
+    Returns:
+        np.ndarray: _description_
+    """
+    X_train = []
+    Y_train = []
+    count = 0
+    for i in range(seq_len, len(data)):
+        try:
+            tmp = data[i]
+            # Extrameos media y std
+            tmp_mean = np.mean(tmp)
+            tmp_std = np.std(tmp)
+
+            # extraemos y estandarizamos datos de entrenamiento
+            tmp = data[i][:seq_len]
+            tmp = (tmp - tmp_mean) / tmp_std
+            X_train.append(tmp)
+            
+            # extraemos y estandarizamos datos de validacion
+            tmp = data[i][seq_len:]
+            tmp = (tmp - tmp_mean) / tmp_std
+            Y_train.append(tmp)
+        except:
+            count += 1
+
+    
+    # transofrmamos a ndarray
+    X_train = np.array(X_train)
+    Y_train = np.array(Y_train)
+
+    return X_train, Y_train
