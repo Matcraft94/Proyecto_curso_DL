@@ -3,3 +3,4 @@ data/datos_ODEs_200.csv
 data/datos_ODEs_100.csv
 *.csv
 *.png
+*.pyc
